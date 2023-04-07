@@ -63,28 +63,31 @@ function datamineItems() {
       continue;
     }
 
-    const found = visitUrl("inv_equip.php?pwd=&which=2&action=equip&whichitem=" + id);
-    if (!found.includes("Nopers.")) {
-      const tradeable = !visitUrl(
-        "town_sellflea.php?pwd&whichitem=" + id + "&sellprice=100000&selling=Yep."
-      ).includes("That item cannot be sold or transferred.");
+    const found = visitUrl(`inv_equip.php?pwd=&which=2&action=equip&whichitem=${id}`);
+    if (found.includes("Nopers.")) {
+      print(`Did not find item id: ${id}`);
+      continue;
+    }
 
-      const type = found.includes("Ghosts can't wear equipment, it would just fall through.")
-        ? "fam equip"
-        : found.includes("You can't equip an off-hand item while wielding a 2-handed weapon.")
-        ? "offhand"
-        : visitUrl("inv_eat.php?pwd&whichitem=" + id).includes(
-            "You don't have the item you're trying to use"
-          )
-        ? "food"
-        : visitUrl("inv_booze.php?pwd&whichitem=" + id).includes(
-            "You don't have the item you're trying to use"
-          )
-        ? "booze"
-        : "thing";
+    const flea = visitUrl(`town_sellflea.php?pwd&whichitem=${id}&sellprice=100000&selling=Yep.`);
+    const tradeable = !flea.includes("That item cannot be sold or transferred.");
+    visitUrl(`town_sellflea.php?action=remove&whichitem=${id}&whichprice=100000&pwd=`);
 
-      print(`Found ${tradeable ? "tradeable" : "untradeable"} ${type} ${id}`);
-    } else print("Did not find item id: " + id);
+    const type = found.includes("Ghosts can't wear equipment, it would just fall through.")
+      ? "fam equip"
+      : found.includes("You can't equip an off-hand item while wielding a 2-handed weapon.")
+      ? "offhand"
+      : visitUrl(`inv_eat.php?pwd&whichitem=${id}`).includes(
+          "You don't have the item you're trying to use"
+        )
+      ? "food"
+      : visitUrl(`inv_booze.php?pwd&whichitem=${id}`).includes(
+          "You don't have the item you're trying to use"
+        )
+      ? "booze"
+      : "thing";
+
+    print(`Found ${tradeable ? "tradeable" : "untradeable"} ${type} ${id}`);
   }
 
   useFamiliar(lastFam);
