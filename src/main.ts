@@ -1,5 +1,6 @@
 import { Args, ParseError } from "grimoire-kolmafia";
 import {
+  Item,
   availableAmount,
   cliExecute,
   equip,
@@ -14,7 +15,7 @@ import {
 import { $familiar, $item, $skill } from "libram";
 
 const DEFAULT_FAM_ID = 1 + toInt($familiar`Pixel Rock`);
-const DEFAULT_ITEM_ID = 1 + toInt($item`shadow needle`);
+const DEFAULT_ITEM_ID = 1 + toInt($item`cursed monkey glove`);
 const DEFAULT_SKILL_ID = 1 + toInt($skill`Psychogeologist`);
 
 type targetInfo = [string, number];
@@ -57,9 +58,11 @@ function datamineItems() {
   useFamiliar($familiar`Ghost of Crimbo Commerce`);
   equip($item`high-temperature mining drill`);
 
+  const known = new Map<number, Item>(Item.all().map((i) => [toInt(i), i]));
+
   for (let id = config.target[1]; id < config.target[1] + config.range; id++) {
-    if (toItem(id) !== $item`none`) {
-      print(`${id} is already known as ${toItem(id)}`);
+    if (known.has(id)) {
+      print(`${id} is already known as ${known.get(id)}`);
       continue;
     }
     if (availableAmount(toItem(id)) > 0) {
