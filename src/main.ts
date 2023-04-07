@@ -58,6 +58,10 @@ function datamineItems() {
   equip($item`high-temperature mining drill`);
 
   for (let id = config.target[1]; id < config.target[1] + config.range; id++) {
+    if (toItem(id) !== $item`none`) {
+      print(`${id} is already known as ${toItem(id)}`);
+      continue;
+    }
     if (availableAmount(toItem(id)) > 0) {
       print(`${id} is already owned`);
       continue;
