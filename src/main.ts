@@ -58,14 +58,13 @@ function datamineItems() {
   useFamiliar($familiar`Ghost of Crimbo Commerce`);
   equip($item`high-temperature mining drill`);
 
-  const known = new Map<number, Item>(Item.all().map((i) => [toInt(i), i]));
-
   for (let id = config.target[1]; id < config.target[1] + config.range; id++) {
-    if (known.has(id)) {
-      print(`${id} is already known as ${known.get(id)}`);
+    const item = toItem(id.toFixed());
+    if (item !== $item`none`) {
+      print(`${id} is already known as ${item}`);
       continue;
     }
-    if (availableAmount(toItem(id)) > 0) {
+    if (availableAmount(item) > 0) {
       print(`${id} is already owned`);
       continue;
     }
