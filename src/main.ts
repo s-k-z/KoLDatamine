@@ -15,8 +15,8 @@ import {
 import { $familiar, $item, $skill } from "libram";
 
 const DEFAULT_FAM_ID = 1 + toInt($familiar`Pixel Rock`);
-const DEFAULT_ITEM_ID = 1 + toInt($item`cursed monkey glove`);
-const DEFAULT_SKILL_ID = 1 + toInt($skill`Psychogeologist`);
+const DEFAULT_ITEM_ID = 1 + toInt($item`replica sleeping patriotic eagle`);
+const DEFAULT_SKILL_ID = 1 + toInt($skill`Perpetrate Mild Evil`);
 
 type targetInfo = [string, number];
 const parseConfig = (target: string): targetInfo | ParseError => {
@@ -91,6 +91,10 @@ function datamineItems() {
           "You don't have the item you're trying to use"
         )
       ? "booze"
+      : visitUrl(`inv_spleen.php?pwd&whichitem=${id}`).includes(
+          "You don't have the item you're trying to use"
+        )
+      ? "spleen"
       : "thing";
 
     print(`Found ${tradeable ? "tradeable" : "untradeable"} ${type} ${id}`);
